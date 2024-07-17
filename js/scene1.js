@@ -29,10 +29,14 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .call(d3.axisBottom(x))
     .append("text")
     .attr("class", "axis-title")
-    .attr("x", width)
-    .attr("y", -10)
-    .style("text-anchor", "end")
-    .text("Age");
+    .attr("x", width / 2) // Center the label
+    .attr("y", 40) // Move the label below the axis
+    .attr("fill", "#000")
+    .attr("font-weight", "bold")
+    .attr("text-anchor", "middle")
+    .text("Age")
+    .style("font-family", "Arial")
+    .style("font-size", "12px");
 
   // Y axis
   const y = d3.scaleLinear()
@@ -44,11 +48,15 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .call(d3.axisLeft(y))
     .append("text")
     .attr("class", "axis-title")
-    .attr("x", -10)
-    .attr("y", 10)
+    .attr("x", -height / 2) // Center the label vertically
+    .attr("y", -50) // Move the label to the left of the axis
+    .attr("fill", "#000")
+    .attr("font-weight", "bold")
+    .attr("text-anchor", "middle")
     .attr("transform", "rotate(-90)")
-    .style("text-anchor", "end")
-    .text("Height (cm)");
+    .text("Height (cm)")
+    .style("font-family", "Arial")
+    .style("font-size", "12px");
 
   // Color scale for sports
   const sportColors = Array.from(new Set(data.map(d => d.Sport)));
