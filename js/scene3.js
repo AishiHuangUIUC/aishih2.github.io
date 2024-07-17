@@ -38,4 +38,46 @@ d3.csv("data/athlete_events.csv").then(function(data) {
 
   svg.append("g")
     .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom
+    .call(d3.axisBottom(x))
+    .selectAll("text")
+    .attr("transform", "rotate(-45)")
+    .style("text-anchor", "end");
+
+  svg.append("g")
+    .call(d3.axisLeft(y));
+
+  const colors = { gold: "#ffd700", silver: "#c0c0c0", bronze: "#cd7f32" };
+
+  svg.selectAll(".bar.gold")
+    .data(top10Athletes)
+    .enter()
+    .append("rect")
+    .attr("class", "bar gold")
+    .attr("x", d => x(d.name))
+    .attr("y", d => y(d.gold))
+    .attr("width", x.bandwidth())
+    .attr("height", d => height - y(d.gold))
+    .attr("fill", colors.gold);
+
+  svg.selectAll(".bar.silver")
+    .data(top10Athletes)
+    .enter()
+    .append("rect")
+    .attr("class", "bar silver")
+    .attr("x", d => x(d.name))
+    .attr("y", d => y(d.gold + d.silver))
+    .attr("width", x.bandwidth())
+    .attr("height", d => height - y(d.silver))
+    .attr("fill", colors.silver);
+
+  svg.selectAll(".bar.bronze")
+    .data(top10Athletes)
+    .enter()
+    .append("rect")
+    .attr("class", "bar bronze")
+    .attr("x", d => x(d.name))
+    .attr("y", d => y(d.gold + d.silver + d.bronze))
+    .attr("width", x.bandwidth())
+    .attr("height", d => height - y(d.bronze))
+    .attr("fill", colors.bronze);
+});
