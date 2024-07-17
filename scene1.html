@@ -6,6 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Olympic Athletes Overview</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            width: auto;
+            height: auto;
+            padding: 5px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -13,28 +27,22 @@
         <h1>Olympic Athletes Overview</h1>
         <button onclick="location.href='index.html'">Home</button>
     </div>
-    <label for="yearFilter">Choose a year:</label>
-    <select id="yearFilter">
-        <option value="all">All Years</option>
-    </select>
     <div class="container">
         <div id="plot-container"></div>
-        <div id="legend-container"></div>
         <div class="text-container">
-            <p>This data is drawn from 120 years of Olympic history, representing a rich source of insights:</p>
+            <p>This visualization provides an overview of Olympic athletes, showing their age and height. Hover over the points to see more details about each athlete.</p>
             <ul>
-                <li>Participation in the Olympics has increased over the years, reflecting growing global interest.</li>
-                <li>Gender diversity has improved, with more female athletes participating over time.</li>
-                <li>The dataset includes records of medals won, countries represented, and various sports disciplines.</li>
+                <li>Age is represented on the X-axis.</li>
+                <li>Height (in cm) is represented on the Y-axis.</li>
+                <li>Hovering over a point reveals the athlete's name, age, height, team, and sport.</li>
             </ul>
-            <p>Explore the data to see trends in Olympic history and athlete performance.</p>
         </div>
     </div>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="js/scene1.js"></script>
     <div class="bottom-banner">
         <button onclick="location.href='index.html'">Prev</button>
-        <button onclick="location.href='page2.html'">Next</button>
+        <button onclick="location.href='scene2.html'">Next</button>
     </div>
 </body>
 
