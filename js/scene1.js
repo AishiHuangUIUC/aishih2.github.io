@@ -50,6 +50,9 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .style("text-anchor", "end")
     .text("Height (cm)");
 
+  // Color scale
+  const color = d3.scaleOrdinal(d3.schemeCategory10);
+  
   // Tooltip
   const tooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
@@ -63,7 +66,7 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .attr("cx", d => x(d.Age))
     .attr("cy", d => y(d.Height))
     .attr("r", 3)
-    .style("fill", "#69b3a2")
+    .style("fill", d => color(d.Sport))
     .on("mouseover", function(event, d) {
       tooltip.transition()
         .duration(200)
@@ -81,4 +84,24 @@ d3.csv("data/athlete_events.csv").then(function(data) {
         .duration(500)
         .style("opacity", 0);
     });
+
+  // Add legend
+  const legend = svg.selectAll(".legend")
+    .data(color.domain())
+    .enter().append("g")
+    .attr("class", "legend")
+    .attr("transform", (d, i) => "translate(0," + i * 20 + ")");
+
+  legend.append("rect")
+    .attr("x", width - 18)
+    .attr("width", 18)
+    .attr("height", 18)
+    .style("fill", color);
+
+  legend.append("text")
+    .attr("x", width - 24)
+    .attr("y", 9)
+    .attr("dy", ".35em")
+    .style("text-anchor", "end")
+    .text(d => d);
 });
