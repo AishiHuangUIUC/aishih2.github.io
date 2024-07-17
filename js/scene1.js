@@ -100,18 +100,22 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .data(sportColors)
     .enter().append("g")
     .attr("class", "legend")
-    .attr("transform", (d, i) => "translate(0," + i * 20 + ")");
+    .attr("transform", (d, i) => "translate(" + (i * 100) + "," + (height + 40) + ")");
 
   legend.append("rect")
-    .attr("x", width - 18)
+    .attr("x", 0)
     .attr("width", 18)
     .attr("height", 18)
     .style("fill", color);
 
   legend.append("text")
-    .attr("x", width - 24)
+    .attr("x", 24)
     .attr("y", 9)
     .attr("dy", ".35em")
-    .style("text-anchor", "end")
+    .style("text-anchor", "start")
     .text(d => d);
+
+  // Adjust plot-container height to accommodate the legend
+  d3.select("#plot-container svg")
+    .attr("height", height + margin.top + margin.bottom + 60);
 });
