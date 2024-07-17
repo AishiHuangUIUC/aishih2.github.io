@@ -77,7 +77,6 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .attr("width", x.bandwidth())
     .on("mouseover", function(event, d) {
       const medalType = d3.select(this.parentNode).datum().key;
-      const countryData = d.data.values.find(v => v.key === medalType);
       const maleMedals = data.filter(a => a.NOC === d.data.key && a.Medal === medalType && a.Sex === "M").length;
       const femaleMedals = data.filter(a => a.NOC === d.data.key && a.Medal === medalType && a.Sex === "F").length;
 
