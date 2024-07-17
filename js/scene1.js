@@ -50,9 +50,11 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .style("text-anchor", "end")
     .text("Height (cm)");
 
-  // Color scale
-  const color = d3.scaleOrdinal(d3.schemeCategory10);
-  
+  // Color scale for sports
+  const sportColors = Array.from(new Set(data.map(d => d.Sport)));
+  const color = d3.scaleOrdinal(d3.schemeCategory10)
+    .domain(sportColors);
+
   // Tooltip
   const tooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
@@ -87,7 +89,7 @@ d3.csv("data/athlete_events.csv").then(function(data) {
 
   // Add legend
   const legend = svg.selectAll(".legend")
-    .data(color.domain())
+    .data(sportColors)
     .enter().append("g")
     .attr("class", "legend")
     .attr("transform", (d, i) => "translate(0," + i * 20 + ")");
