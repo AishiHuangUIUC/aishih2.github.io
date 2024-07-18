@@ -8,7 +8,10 @@ d3.csv("data/athlete_events.csv").then(function(data) {
       totalCountries: d3.set(v.map(d => d.NOC)).size(),
       totalSports: d3.set(v.map(d => d.Sport)).size()
     }))
-    .entries(data);
+    .entries(data)
+    .map(d => ({ key: +d.key, value: d.value })); // Convert key to number
+
+  console.log("Year Data:", yearData);
 
   const margin = { top: 50, right: 30, bottom: 100, left: 60 };
   const width = 800 - margin.left - margin.right;
