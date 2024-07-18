@@ -39,3 +39,10 @@ svg {
     pointer-events: none;
 }
 
+.landing-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding-top: 150px;
+    text-align: center;
+    padding-bottom: 60px;
+}
