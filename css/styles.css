@@ -39,10 +39,25 @@ svg {
     pointer-events: none;
 }
 
-.landing-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding-top: 150px;
-    text-align: center;
-    padding-bottom: 60px;
+.banner, .bottom-banner {
+    background-color: blue;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+.bottom-banner {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: auto;
+    background-color: blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    box-sizing: border-box;
+    gap: 10px;
 }
