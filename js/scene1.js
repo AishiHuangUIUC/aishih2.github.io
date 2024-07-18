@@ -91,10 +91,20 @@
 
 
 d3.csv("data/athlete_events.csv").then(function(data) {
+    // Basic dimensions
     const margin = { top: 20, right: 20, bottom: 60, left: 80 };
     const width = 800 - margin.left - margin.right;
     const height = 600 - margin.top - margin.bottom;
 
+    // Append SVG to the plot-container
+    const svg = d3.select("#plot-container")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // Scales
     const xScale = d3.scaleLinear()
         .domain(d3.extent(data, d => +d.Age))
         .range([0, width]);
@@ -103,13 +113,7 @@ d3.csv("data/athlete_events.csv").then(function(data) {
         .domain(d3.extent(data, d => +d.Height))
         .range([height, 0]);
 
-    const svg = d3.select("#plot-container")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
+    // Axes
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(xScale));
@@ -117,6 +121,7 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     svg.append("g")
         .call(d3.axisLeft(yScale));
 
+    // Basic scatter plot
     svg.selectAll("circle")
         .data(data)
         .enter()
@@ -128,6 +133,7 @@ d3.csv("data/athlete_events.csv").then(function(data) {
 }).catch(function(error) {
     console.error("Error loading the CSV file:", error);
 });
+
 
 
 
