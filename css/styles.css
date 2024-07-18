@@ -40,7 +40,7 @@ svg {
 }
 
 .banner, .bottom-banner {
-    background-color: #6699CC;
+    background-color: #72A0C1;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -54,7 +54,7 @@ svg {
     left: 0;
     right: 0;
     height: auto;
-    background-color: #6699CC;
+    background-color: #72A0C1;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -67,12 +67,12 @@ button {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    background-color: #0039a6;
+    background-color: #89CFF0;
     color: white;
     border: none;
     border-radius: 5px;
 }
 
 button:hover {
-    background-color: #0039a6;
+    background-color: #F0F8FF;
 }
