@@ -1,6 +1,6 @@
 // d3.csv("data/athlete_events.csv").then(function(data) {
-//     // Filter out rows with NA heights
-//     const filteredData = data.filter(d => d.Height !== "NA");
+//     // Filter out rows with NA heights and NA ages
+//     const filteredData = data.filter(d => d.Height !== "NA" && d.Age !== "NA");
 
 //     // Dimensions and margins
 //     const margin = { top: 20, right: 20, bottom: 60, left: 80 };
@@ -78,7 +78,6 @@
 
 
 
-
 d3.csv("data/athlete_events.csv").then(function(data) {
     // Filter out rows with NA heights and NA ages
     const filteredData = data.filter(d => d.Height !== "NA" && d.Age !== "NA");
@@ -144,7 +143,7 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     svg.append("text")
         .attr("text-anchor", "end")
         .attr("x", width / 2)
-        .attr("y", height + margin.top + 40)
+        .attr("y", height + margin.top + 30) // Adjusted the y position
         .text("Age");
 
     // Add Y axis label
