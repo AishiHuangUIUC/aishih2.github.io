@@ -14,7 +14,7 @@ d3.csv("data/athlete_events.csv").then(function(data) {
   const svg = d3.select("#plot-container")
     .append("svg")
     .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom + 100) // Increase height to accommodate legend
+    .attr("height", height + margin.top + margin.bottom + 150) // Increase height to accommodate legend
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -58,9 +58,9 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .style("font-family", "Arial")
     .style("font-size", "12px");
 
-  // Color scale for sports
+  // Color scale for sports with more colors
   const sportColors = Array.from(new Set(data.map(d => d.Sport)));
-  const color = d3.scaleOrdinal(d3.schemeCategory10)
+  const color = d3.scaleOrdinal(d3.schemeTableau10.concat(d3.schemeDark2, d3.schemeSet3))
     .domain(sportColors);
 
   // Tooltip
@@ -100,7 +100,7 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .data(sportColors)
     .enter().append("g")
     .attr("class", "legend")
-    .attr("transform", (d, i) => "translate(" + ((i % 5) * 160) + "," + (height + 40 + Math.floor(i / 5) * 20) + ")"); // Adjust position to multiple rows with 5 items per row
+    .attr("transform", (d, i) => "translate(" + ((i % 6) * 130) + "," + (height + 40 + Math.floor(i / 6) * 20) + ")"); // Adjust position to multiple rows with 6 items per row
 
   legend.append("rect")
     .attr("x", 0)
