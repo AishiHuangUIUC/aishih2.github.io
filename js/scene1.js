@@ -1,5 +1,5 @@
 // scene1.js
-d3.csv("data/data.csv").then(function(data) {
+d3.csv("data/athlete_events.csv").then(function(data) {
     // Process data to get earnings by decade
     const earningsByDecade = d3.rollup(data, v => d3.sum(v, d => d.Gross), d => d.Decade);
     const dataArray = Array.from(earningsByDecade, ([decade, gross]) => ({ decade, gross }));
