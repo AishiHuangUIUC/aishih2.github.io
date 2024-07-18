@@ -51,7 +51,11 @@
 </html>
  -->
 
- <!DOCTYPE html>
+ 
+
+
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -59,19 +63,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Olympic Athletes Overview</title>
     <link rel="stylesheet" href="css/styles.css">
-
     <style>
-        .tooltip {
-            position: absolute;
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .banner {
             text-align: center;
-            width: auto;
-            height: auto;
-            padding: 5px;
-            font: 12px sans-serif;
-            background: lightsteelblue;
-            border: 0px;
-            border-radius: 8px;
-            pointer-events: none;
+            margin-bottom: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #plot-container {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+        .text-container {
+            max-width: 800px;
+            text-align: left;
+        }
+        .bottom-banner {
+            text-align: center;
+            margin-top: 20px;
         }
     </style>
 </head>
