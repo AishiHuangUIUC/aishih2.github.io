@@ -91,7 +91,40 @@
 
 
 d3.csv("data/athlete_events.csv").then(function(data) {
-    console.log(data);
+    const margin = { top: 20, right: 20, bottom: 60, left: 80 };
+    const width = 800 - margin.left - margin.right;
+    const height = 600 - margin.top - margin.bottom;
+
+    const xScale = d3.scaleLinear()
+        .domain(d3.extent(data, d => +d.Age))
+        .range([0, width]);
+
+    const yScale = d3.scaleLinear()
+        .domain(d3.extent(data, d => +d.Height))
+        .range([height, 0]);
+
+    const svg = d3.select("#plot-container")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(xScale));
+
+    svg.append("g")
+        .call(d3.axisLeft(yScale));
+
+    svg.selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", d => xScale(+d.Age))
+        .attr("cy", d => yScale(+d.Height))
+        .attr("r", 5)
+        .attr("fill", "steelblue");
 }).catch(function(error) {
     console.error("Error loading the CSV file:", error);
 });
