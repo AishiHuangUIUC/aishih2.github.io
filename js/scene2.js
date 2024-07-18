@@ -258,45 +258,47 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     svg.append("g")
         .call(d3.axisLeft(yScale));
 
+    // Stack layout
+    const stack = d3.stack()
+        .keys(['gold', 'silver', 'bronze'])
+        .order(d3.stackOrderNone)
+        .offset(d3.stackOffsetNone);
+
+    const stackedData = stack(sortedMedalsByCountry.map(d => ({ country: d.country, gold: d.gold, silver: d.silver, bronze: d.bronze })));
+
     // Bars
-    const bars = svg.selectAll(".bar")
-        .data(sortedMedalsByCountry)
+    const bars = svg.selectAll(".layer")
+        .data(stackedData)
         .enter()
         .append("g")
-        .attr("class", "bar")
-        .attr("transform", d => `translate(${xScale(d.country)},0)`);
+        .attr("class", "layer")
+        .style("fill", d => colorScale(d.key));
 
     bars.selectAll("rect")
-        .data(d => [
-            { type: 'gold', value: d.gold, total: d.total },
-            { type: 'silver', value: d.silver, total: d.total },
-            { type: 'bronze', value: d.bronze, total: d.total }
-        ])
+        .data(d => d)
         .enter()
         .append("rect")
-        .attr("x", d => 0)
-        .attr("y", d => yScale(d.total))
+        .attr("x", d => xScale(d.data.country))
+        .attr("y", d => yScale(d[1]))
+        .attr("height", d => yScale(d[0]) - yScale(d[1]))
         .attr("width", xScale.bandwidth())
-        .attr("height", d => height - yScale(d.total))
-        .attr("fill", d => colorScale(d.type))
-        .attr("data-type", d => d.type);
-
-    // Tooltip
-    const tooltip = d3.select("body").append("div")
-        .attr("class", "tooltip")
-        .style("display", "none");
-
-    bars.selectAll("rect")
         .on("mouseover", function(event, d) {
             const [mouseX, mouseY] = d3.pointer(event);
+            const key = d3.select(this.parentNode).datum().key;
             tooltip.style("display", "block")
-                .html(`Country: ${d3.select(this.parentNode).datum().country}<br>${d.type.charAt(0).toUpperCase() + d.type.slice(1)} Medals: ${d.value}`)
+                .html(`Country: ${d.data.country}<br>${key.charAt(0).toUpperCase() + key.slice(1)} Medals: ${d.data[key]}`)
                 .style("left", (mouseX + 10) + "px")
                 .style("top", (mouseY + 10) + "px");
         })
         .on("mouseout", function() {
             tooltip.style("display", "none");
         });
+
+    // Tooltip
+    const tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("display", "none");
+
 }).catch(function(error) {
     console.error("Error loading the CSV file:", error);
 });
