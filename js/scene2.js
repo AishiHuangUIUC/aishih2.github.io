@@ -138,7 +138,7 @@ d3.csv("data/athlete_events.csv").then(function(data) {
         .padding(0.1);
 
     const yScale = d3.scaleLinear()
-        .domain([0, d3.max(sortedMedalsByCountry, d => d.total)])
+        .domain([0, 60])
         .nice()
         .range([height, 0]);
 
