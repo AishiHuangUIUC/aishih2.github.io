@@ -7,6 +7,8 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .rollup(v => v.length)
     .entries(data);
 
+  console.log("Medal Data:", medalData);
+
   const margin = { top: 50, right: 30, bottom: 100, left: 60 };
   const width = 800 - margin.left - margin.right;
   const height = 600 - margin.top - margin.bottom;
@@ -60,6 +62,8 @@ d3.csv("data/athlete_events.csv").then(function(data) {
 
   const series = stack(medalData);
 
+  console.log("Stacked Data:", series);
+
   // Bars
   svg.selectAll(".bar")
     .data(series)
@@ -85,6 +89,7 @@ d3.csv("data/athlete_events.csv").then(function(data) {
         .style("opacity", .9);
       tooltip.html("Country: " + d.data.key + "<br/>" +
                    "Medal: " + medalType + "<br/>" +
+                   "Total: " + (d[1] - d[0]) + "<br/>" +
                    "Male: " + maleMedals + "<br/>" +
                    "Female: " + femaleMedals)
         .style("left", (event.pageX + 5) + "px")
