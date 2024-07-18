@@ -1,11 +1,13 @@
 // Load the CSV data
 d3.csv("data/athlete_events.csv").then(function(data) {
-  // Group data by NOC (country) and Medal
-  const medalData = d3.nest()
-    .key(d => d.NOC)
-    .key(d => d.Medal)
-    .rollup(v => v.length)
-    .entries(data);
+  // Group data by NOC (country) and Medal using d3.group
+  const medalData = Array.from(d3.group(data, d => d.NOC), ([key, values]) => ({
+    key,
+    values: Array.from(d3.group(values, d => d.Medal), ([medal, medalValues]) => ({
+      key: medal,
+      value: medalValues.length
+    }))
+  }));
 
   console.log("Medal Data:", medalData);
 
@@ -80,18 +82,13 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .attr("height", d => y(d[0]) - y(d[1]))
     .attr("width", x.bandwidth())
     .on("mouseover", function(event, d) {
-      const medalType = d3.select(this.parentNode).datum().key;
-      const maleMedals = data.filter(a => a.NOC === d.data.key && a.Medal === medalType && a.Sex === "M").length;
-      const femaleMedals = data.filter(a => a.NOC === d.data.key && a.Medal === medalType && a.Sex === "F").length;
-
+      const [medalType] = d3.select(this.parentNode).datum().key;
       tooltip.transition()
         .duration(200)
         .style("opacity", .9);
       tooltip.html("Country: " + d.data.key + "<br/>" +
                    "Medal: " + medalType + "<br/>" +
-                   "Total: " + (d[1] - d[0]) + "<br/>" +
-                   "Male: " + maleMedals + "<br/>" +
-                   "Female: " + femaleMedals)
+                   "Count: " + (d[1] - d[0]))
         .style("left", (event.pageX + 5) + "px")
         .style("top", (event.pageY - 28) + "px");
     })
