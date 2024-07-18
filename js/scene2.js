@@ -1,66 +1,187 @@
-// scene2.js
+// // scene2.js
+// d3.csv("data/athlete_events.csv").then(function(data) {
+//     const medalsByCountry = d3.rollup(data, v => v.length, d => d.NOC);
+//     const top15Countries = Array.from(medalsByCountry, ([NOC, count]) => ({ NOC, count }))
+//         .filter(d => d.count > 1)
+//         .sort((a, b) => b.count - a.count)
+//         .slice(0, 15);
+
+//     const margin = { top: 20, right: 20, bottom: 60, left: 80 };
+//     const width = 800 - margin.left - margin.right;
+//     const height = 600 - margin.top - margin.bottom;
+
+//     const xScale = d3.scaleBand()
+//         .domain(top15Countries.map(d => d.NOC))
+//         .range([0, width])
+//         .padding(0.2);
+
+//     const yScale = d3.scaleLinear()
+//         .domain([0, d3.max(top15Countries, d => d.count)])
+//         .range([height, 0]);
+
+//     const svg = d3.select("#bar-container")
+//         .append("svg")
+//         .attr("width", width + margin.left + margin.right)
+//         .attr("height", height + margin.top + margin.bottom)
+//         .append("g")
+//         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+//     const tooltip = d3.select("body").append("div")
+//         .attr("class", "tooltip")
+//         .style("opacity", 0);
+
+//     svg.selectAll(".bar")
+//         .data(top15Countries)
+//         .enter()
+//         .append("rect")
+//         .attr("class", "bar")
+//         .attr("x", d => xScale(d.NOC))
+//         .attr("width", xScale.bandwidth())
+//         .attr("y", d => yScale(d.count))
+//         .attr("height", d => height - yScale(d.count))
+//         .attr("fill", "steelblue")
+//         .on("mouseover", function(event, d) {
+//             const [mouseX, mouseY] = d3.pointer(event);
+
+//             tooltip.transition()
+//                 .duration(200)
+//                 .style("opacity", .9);
+
+//             tooltip.html(`Country: ${d.NOC}<br>Medal Count: ${d.count}`)
+//                 .style("left", (mouseX + 10) + "px")
+//                 .style("top", (mouseY + 10) + "px");
+//         })
+//         .on("mouseout", function() {
+//             tooltip.transition()
+//                 .duration(500)
+//                 .style("opacity", 0);
+//         });
+
+//     svg.append("g")
+//         .attr("transform", "translate(0," + height + ")")
+//         .call(d3.axisBottom(xScale));
+
+//     svg.append("g")
+//         .call(d3.axisLeft(yScale));
+// });
+
 d3.csv("data/athlete_events.csv").then(function(data) {
-    const medalsByCountry = d3.rollup(data, v => v.length, d => d.NOC);
-    const top15Countries = Array.from(medalsByCountry, ([NOC, count]) => ({ NOC, count }))
-        .filter(d => d.count > 1)
-        .sort((a, b) => b.count - a.count)
-        .slice(0, 15);
+  const filteredData = data.filter(d => d.Medal);
 
-    const margin = { top: 20, right: 20, bottom: 60, left: 80 };
-    const width = 800 - margin.left - margin.right;
-    const height = 600 - margin.top - margin.bottom;
+  const medalData = Array.from(d3.group(filteredData, d => d.NOC), ([key, values]) => ({
+    key,
+    values: Array.from(d3.group(values, d => d.Medal), ([medal, medalValues]) => ({
+      key: medal,
+      value: medalValues.length,
+      male: medalValues.filter(d => d.Sex === 'M').length,
+      female: medalValues.filter(d => d.Sex === 'F').length
+    }))
+  })).filter(d => d.values.reduce((acc, curr) => acc + curr.value, 0) > 1);
 
-    const xScale = d3.scaleBand()
-        .domain(top15Countries.map(d => d.NOC))
-        .range([0, width])
-        .padding(0.2);
+  const margin = { top: 50, right: 30, bottom: 100, left: 60 };
+  const width = 800 - margin.left - margin.right;
+  const height = 600 - margin.top - margin.bottom;
 
-    const yScale = d3.scaleLinear()
-        .domain([0, d3.max(top15Countries, d => d.count)])
-        .range([height, 0]);
+  const svg = d3.select("#plot-container")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    const svg = d3.select("#bar-container")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  const x = d3.scaleBand()
+    .domain(medalData.map(d => d.key))
+    .range([0, width])
+    .padding(0.1);
 
-    const tooltip = d3.select("body").append("div")
-        .attr("class", "tooltip")
+  svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x))
+    .selectAll("text")
+    .attr("transform", "rotate(-45)")
+    .style("text-anchor", "end");
+
+  const y = d3.scaleLinear()
+    .domain([0, d3.max(medalData, d => d3.sum(d.values, v => v.value))])
+    .nice()
+    .range([height, 0]);
+
+  svg.append("g")
+    .call(d3.axisLeft(y));
+
+  const color = d3.scaleOrdinal()
+    .domain(["Gold", "Silver", "Bronze"])
+    .range(["#ffd700", "#c0c0c0", "#cd7f32"]);
+
+  const tooltip = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
+  const stack = d3.stack()
+    .keys(["Gold", "Silver", "Bronze"])
+    .value((d, key) => {
+      const medal = d.values.find(v => v.key === key);
+      return medal ? medal.value : 0;
+    });
+
+  const series = stack(medalData);
+
+  svg.selectAll(".bar")
+    .data(series)
+    .enter()
+    .append("g")
+    .attr("class", "bar")
+    .attr("fill", d => color(d.key))
+    .selectAll("rect")
+    .data(d => d)
+    .enter()
+    .append("rect")
+    .attr("x", d => x(d.data.key))
+    .attr("y", d => y(d[1]))
+    .attr("height", d => y(d[0]) - y(d[1]))
+    .attr("width", x.bandwidth())
+    .on("mouseover", function(event, d) {
+      const [medalType] = d3.select(this.parentNode).datum().key;
+      const maleCount = d.data.values.find(v => v.key === medalType)?.male || 0;
+      const femaleCount = d.data.values.find(v => v.key === medalType)?.female || 0;
+
+      tooltip.transition()
+        .duration(200)
+        .style("opacity", .9);
+      tooltip.html("Country: " + d.data.key + "<br/>" +
+                   "Medal: " + medalType + "<br/>" +
+                   "Count: " + (d[1] - d[0]) + "<br/>" +
+                   "Male: " + maleCount + "<br/>" +
+                   "Female: " + femaleCount)
+        .style("left", (event.pageX + 5) + "px")
+        .style("top", (event.pageY - 28) + "px");
+    })
+    .on("mouseout", function() {
+      tooltip.transition()
+        .duration(500)
         .style("opacity", 0);
+    });
 
-    svg.selectAll(".bar")
-        .data(top15Countries)
-        .enter()
-        .append("rect")
-        .attr("class", "bar")
-        .attr("x", d => xScale(d.NOC))
-        .attr("width", xScale.bandwidth())
-        .attr("y", d => yScale(d.count))
-        .attr("height", d => height - yScale(d.count))
-        .attr("fill", "steelblue")
-        .on("mouseover", function(event, d) {
-            const [mouseX, mouseY] = d3.pointer(event);
+  svg.append("text")
+    .attr("class", "axis-title")
+    .attr("x", width / 2)
+    .attr("y", height + 60)
+    .attr("fill", "#000")
+    .attr("font-weight", "bold")
+    .attr("text-anchor", "middle")
+    .text("Country")
+    .style("font-family", "Arial")
+    .style("font-size", "12px");
 
-            tooltip.transition()
-                .duration(200)
-                .style("opacity", .9);
-
-            tooltip.html(`Country: ${d.NOC}<br>Medal Count: ${d.count}`)
-                .style("left", (mouseX + 10) + "px")
-                .style("top", (mouseY + 10) + "px");
-        })
-        .on("mouseout", function() {
-            tooltip.transition()
-                .duration(500)
-                .style("opacity", 0);
-        });
-
-    svg.append("g")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(xScale));
-
-    svg.append("g")
-        .call(d3.axisLeft(yScale));
+  svg.append("text")
+    .attr("class", "axis-title")
+    .attr("x", -height / 2)
+    .attr("y", -50)
+    .attr("fill", "#000")
+    .attr("font-weight", "bold")
+    .attr("text-anchor", "middle")
+    .attr("transform", "rotate(-90)")
+    .text("Medal Count")
+    .style("font-family", "Arial")
+    .style("font-size", "12px");
 });
