@@ -1,6 +1,4 @@
-// Load the CSV data
 d3.csv("data/athlete_events.csv").then(function(data) {
-  // Parse data
   data.forEach(d => {
     d.Age = +d.Age;
     d.Height = +d.Height;
@@ -14,11 +12,10 @@ d3.csv("data/athlete_events.csv").then(function(data) {
   const svg = d3.select("#plot-container")
     .append("svg")
     .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom + 150) // Increase height to accommodate legend
+    .attr("height", height + margin.top + margin.bottom + 150)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  // X axis
   const x = d3.scaleLinear()
     .domain(d3.extent(data, d => d.Age))
     .nice()
@@ -29,8 +26,8 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .call(d3.axisBottom(x))
     .append("text")
     .attr("class", "axis-title")
-    .attr("x", width / 2) // Center the label
-    .attr("y", 40) // Move the label below the axis
+    .attr("x", width / 2)
+    .attr("y", 40)
     .attr("fill", "#000")
     .attr("font-weight", "bold")
     .attr("text-anchor", "middle")
@@ -38,7 +35,6 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .style("font-family", "Arial")
     .style("font-size", "12px");
 
-  // Y axis
   const y = d3.scaleLinear()
     .domain(d3.extent(data, d => d.Height))
     .nice()
@@ -48,8 +44,8 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .call(d3.axisLeft(y))
     .append("text")
     .attr("class", "axis-title")
-    .attr("x", -height / 2) // Center the label vertically
-    .attr("y", -50) // Move the label to the left of the axis
+    .attr("x", -height / 2)
+    .attr("y", -50)
     .attr("fill", "#000")
     .attr("font-weight", "bold")
     .attr("text-anchor", "middle")
@@ -58,19 +54,16 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .style("font-family", "Arial")
     .style("font-size", "12px");
 
-  // Color scale for sports with more colors
   const sportColors = Array.from(new Set(data.map(d => d.Sport)));
-  const color = d3.scaleOrdinal(d3.schemeTableau10.concat(d3.schemeDark2, d3.schemeSet3))
+  const color = d3.scaleOrdinal(d3.schemeCategory10.concat(d3.schemeSet3))
     .domain(sportColors);
 
-  // Tooltip
   const tooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
-  // Scatter plot
   svg.selectAll("dot")
-    .data(data.filter(d => d.Age && d.Height)) // Filter out missing data
+    .data(data.filter(d => d.Age && d.Height))
     .enter()
     .append("circle")
     .attr("cx", d => x(d.Age))
@@ -95,12 +88,11 @@ d3.csv("data/athlete_events.csv").then(function(data) {
         .style("opacity", 0);
     });
 
-  // Add legend
   const legend = svg.selectAll(".legend")
     .data(sportColors)
     .enter().append("g")
     .attr("class", "legend")
-    .attr("transform", (d, i) => "translate(" + ((i % 6) * 130) + "," + (height + 40 + Math.floor(i / 6) * 20) + ")"); // Adjust position to multiple rows with 6 items per row
+    .attr("transform", (d, i) => "translate(" + ((i % 8) * 100) + "," + (height + 40 + Math.floor(i / 8) * 20) + ")");
 
   legend.append("rect")
     .attr("x", 0)
@@ -115,7 +107,6 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .style("text-anchor", "start")
     .text(d => d);
 
-  // Adjust plot-container height to accommodate the legend
   d3.select("#plot-container svg")
-    .attr("height", height + margin.top + margin.bottom + 60);
+    .attr("height", height + margin.top + margin.bottom + 150);
 });
