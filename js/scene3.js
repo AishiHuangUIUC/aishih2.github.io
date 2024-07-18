@@ -1,6 +1,4 @@
-// Load the CSV data
 d3.csv("data/athlete_events.csv").then(function(data) {
-  // Group data by Year using d3.group
   const yearData = Array.from(d3.group(data, d => d.Year), ([key, values]) => ({
     key: +key,
     value: {
@@ -8,7 +6,7 @@ d3.csv("data/athlete_events.csv").then(function(data) {
       totalCountries: new Set(values.map(d => d.NOC)).size,
       totalSports: new Set(values.map(d => d.Sport)).size
     }
-  }));
+  })).sort((a, b) => a.key - b.key);
 
   console.log("Year Data:", yearData);
 
@@ -23,7 +21,6 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  // X axis
   const x = d3.scaleLinear()
     .domain(d3.extent(yearData, d => d.key))
     .range([0, width]);
@@ -32,7 +29,6 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(x).tickFormat(d3.format("d")));
 
-  // Y axis
   const y = d3.scaleLinear()
     .domain([0, d3.max(yearData, d => d.value.totalAthletes)])
     .nice()
@@ -41,13 +37,11 @@ d3.csv("data/athlete_events.csv").then(function(data) {
   svg.append("g")
     .call(d3.axisLeft(y));
 
-  // Line generator
   const line = d3.line()
     .x(d => x(d.key))
     .y(d => y(d.value.totalAthletes))
     .curve(d3.curveMonotoneX);
 
-  // Add the line
   svg.append("path")
     .datum(yearData)
     .attr("fill", "none")
@@ -55,12 +49,10 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .attr("stroke-width", 2)
     .attr("d", line);
 
-  // Tooltip
   const tooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
-  // Add points
   svg.selectAll(".dot")
     .data(yearData)
     .enter().append("circle")
@@ -85,7 +77,6 @@ d3.csv("data/athlete_events.csv").then(function(data) {
         .style("opacity", 0);
     });
 
-  // Add axis labels
   svg.append("text")
     .attr("class", "axis-title")
     .attr("x", width / 2)
