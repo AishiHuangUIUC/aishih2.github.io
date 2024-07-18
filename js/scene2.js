@@ -182,16 +182,16 @@ d3.csv("data/athlete_events.csv").then(function(data) {
 
     bars.selectAll("rect")
         .data(d => [
-            { type: 'gold', value: d.gold, y0: yScale(d.total), y1: yScale(d.total - d.gold) },
-            { type: 'silver', value: d.silver, y0: yScale(d.total - d.gold), y1: yScale(d.total - d.gold - d.silver) },
-            { type: 'bronze', value: d.bronze, y0: yScale(d.total - d.gold - d.silver), y1: yScale(d.total - d.gold - d.silver - d.bronze) }
+            { type: 'gold', value: d.gold, y0: 0, y1: d.gold },
+            { type: 'silver', value: d.silver, y0: d.gold, y1: d.gold + d.silver },
+            { type: 'bronze', value: d.bronze, y0: d.gold + d.silver, y1: d.total }
         ])
         .enter()
         .append("rect")
-        .attr("x", d => 0)
-        .attr("y", d => d.y1)
+        .attr("x", 0)
+        .attr("y", d => yScale(d.y1))
         .attr("width", xScale.bandwidth())
-        .attr("height", d => d.y0 - d.y1)
+        .attr("height", d => yScale(d.y0) - yScale(d.y1))
         .attr("fill", d => colorScale(d.type))
         .on("mouseover", function(event, d) {
             const [mouseX, mouseY] = d3.pointer(event);
