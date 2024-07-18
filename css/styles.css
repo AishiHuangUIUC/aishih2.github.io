@@ -45,6 +45,7 @@ svg {
     justify-content: space-between;
     align-items: center;
     padding: 10px;
+    text-align: center;
 }
 .bottom-banner {
     position: fixed;
