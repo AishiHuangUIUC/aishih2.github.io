@@ -4,23 +4,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top Athletes Over the Years</title>
+    <title>Countries Participation Over the Years</title>
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .banner {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #plot-container {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+        .text-container {
+            max-width: 800px;
+            text-align: left;
+        }
+        .bottom-banner {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            width: auto;
+            height: auto;
+            padding: 5px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+    </style>
 </head>
 
 <body>
     <div class="banner">
-        <h1>Top Athletes Over the Years</h1>
+        <h1>Countries Participation Over the Years</h1>
         <button onclick="location.href='index.html'">Home</button>
     </div>
     <div class="container">
         <div id="plot-container"></div>
         <div class="text-container">
-            <p>This visualization focuses on the top-performing athletes in Olympic history. Key points:</p>
+            <p>This visualization shows the number of countries that participated in the Olympics each year. Hover over the line to see the number of athletes that attended the Olympics each year.</p>
             <ul>
-                <li>Highlighting athletes with the most medals.</li>
-                <li>Identifying trends in athlete performance over time.</li>
-                <li>Recognizing the impact of certain athletes in specific sports.</li>
+                <li>The X-axis represents the year.</li>
+                <li>The Y-axis represents the number of participating countries.</li>
+                <li>Hovering over the line reveals the number of athletes that participated in the corresponding year.</li>
             </ul>
         </div>
     </div>
@@ -34,7 +73,6 @@
 
 </html>
  -->
-
 
 
 
