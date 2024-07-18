@@ -1,17 +1,15 @@
+// scene2.js
 d3.csv("data/athlete_events.csv").then(function(data) {
-    // Process data to get medals by country
     const medalsByCountry = d3.rollup(data, v => v.length, d => d.NOC);
     const top15Countries = Array.from(medalsByCountry, ([NOC, count]) => ({ NOC, count }))
-        .filter(d => d.count >= 1)
+        .filter(d => d.count > 1)
         .sort((a, b) => b.count - a.count)
         .slice(0, 15);
 
-    // Dimensions
     const margin = { top: 20, right: 20, bottom: 60, left: 80 };
     const width = 800 - margin.left - margin.right;
     const height = 600 - margin.top - margin.bottom;
 
-    // Scales
     const xScale = d3.scaleBand()
         .domain(top15Countries.map(d => d.NOC))
         .range([0, width])
@@ -28,7 +26,10 @@ d3.csv("data/athlete_events.csv").then(function(data) {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    // Bars
+    const tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
     svg.selectAll(".bar")
         .data(top15Countries)
         .enter()
@@ -42,49 +43,24 @@ d3.csv("data/athlete_events.csv").then(function(data) {
         .on("mouseover", function(event, d) {
             const [mouseX, mouseY] = d3.pointer(event);
 
-            // Show tooltip next to the bar
-            tooltip.style("display", "block")
-                .html(`
-                    Country: ${d.NOC}<br>
-                    Medal Count: ${d.count}
-                `)
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", .9);
+
+            tooltip.html(`Country: ${d.NOC}<br>Medal Count: ${d.count}`)
                 .style("left", (mouseX + 10) + "px")
                 .style("top", (mouseY + 10) + "px");
         })
         .on("mouseout", function() {
-            tooltip.style("display", "none");
+            tooltip.transition()
+                .duration(500)
+                .style("opacity", 0);
         });
 
-    // Axes
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(xScale));
 
     svg.append("g")
         .call(d3.axisLeft(yScale));
-
-    // Tooltip
-    const tooltip = d3.select("body").append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
-
-    // Labels
-    svg.append("text")
-        .attr("class", "axis-label")
-        .attr("x", width / 2)
-        .attr("y", height + 40)
-        .attr("text-anchor", "middle")
-        .text("Country")
-        .style("font-family", "Arial")
-        .style("font-size", "10px");
-
-    svg.append("text")
-        .attr("class", "axis-label")
-        .attr("transform", "rotate(-90)")
-        .attr("x", -height / 2)
-        .attr("y", -60)
-        .attr("text-anchor", "middle")
-        .text("Medal Count")
-        .style("font-family", "Arial")
-        .style("font-size", "10px");
 });
