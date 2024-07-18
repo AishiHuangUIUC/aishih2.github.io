@@ -1,7 +1,6 @@
-d3.csv("data.csv").then(function(data) {
-    // Process data
-
-    // Group data by decade and calculate earnings
+// scene1.js
+d3.csv("data/data.csv").then(function(data) {
+    // Process data to get earnings by decade
     const earningsByDecade = d3.rollup(data, v => d3.sum(v, d => d.Gross), d => d.Decade);
     const dataArray = Array.from(earningsByDecade, ([decade, gross]) => ({ decade, gross }));
 
@@ -28,6 +27,7 @@ d3.csv("data.csv").then(function(data) {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     // Bars
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
     svg.selectAll(".bar")
         .data(dataArray)
         .enter()
@@ -37,12 +37,16 @@ d3.csv("data.csv").then(function(data) {
         .attr("width", xScale.bandwidth())
         .attr("y", d => yScale(d.gross))
         .attr("height", d => height - yScale(d.gross))
-        .attr("fill", d => colorMap[d.decade] || "red")
+        .attr("fill", d => colorScale(d.decade))
         .on("mouseover", function(event, d) {
-            // Tooltip logic
+            const [mouseX, mouseY] = d3.pointer(event);
+            tooltip.style("display", "block")
+                .html(`Total Gross Earnings: $${d.gross.toLocaleString()}`)
+                .style("left", (mouseX + 10) + "px")
+                .style("top", (mouseY + 10) + "px");
         })
         .on("mouseout", function() {
-            // Hide tooltip
+            tooltip.style("display", "none");
         });
 
     // Axes
@@ -74,7 +78,7 @@ d3.csv("data.csv").then(function(data) {
         legendGroup.append("rect")
             .attr("width", legendSize)
             .attr("height", legendSize)
-            .attr("fill", colorMap[decade]);
+            .attr("fill", colorScale(decade));
 
         legendGroup.append("text")
             .attr("x", legendSize + legendSpacing)
