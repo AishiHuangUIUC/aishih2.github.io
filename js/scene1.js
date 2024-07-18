@@ -100,7 +100,7 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .data(sportColors)
     .enter().append("g")
     .attr("class", "legend")
-    .attr("transform", (d, i) => "translate(" + ((i % 10) * 80) + "," + (height + 40 + Math.floor(i / 10) * 20) + ")"); // Adjust position to multiple rows
+    .attr("transform", (d, i) => "translate(" + ((i % 5) * 160) + "," + (height + 40 + Math.floor(i / 5) * 20) + ")"); // Adjust position to multiple rows with 5 items per row
 
   legend.append("rect")
     .attr("x", 0)
