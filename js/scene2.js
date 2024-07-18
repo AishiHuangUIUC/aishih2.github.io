@@ -138,7 +138,7 @@ d3.csv("data/athlete_events.csv").then(function(data) {
         .padding(0.1);
 
     const yScale = d3.scaleLinear()
-        .domain([0, 60]) // Adjusted the scale to 0-60
+        .domain([0, d3.max(sortedMedalsByCountry, d => d.total)])
         .nice()
         .range([height, 0]);
 
@@ -206,3 +206,4 @@ d3.csv("data/athlete_events.csv").then(function(data) {
 }).catch(function(error) {
     console.error("Error loading the CSV file:", error);
 });
+
