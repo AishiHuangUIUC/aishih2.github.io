@@ -1,15 +1,15 @@
-// Load the CSV data
 d3.csv("data/athlete_events.csv").then(function(data) {
-  // Group data by NOC (country) and Medal using d3.group
-  const medalData = Array.from(d3.group(data, d => d.NOC), ([key, values]) => ({
+  const filteredData = data.filter(d => d.Medal);
+
+  const medalData = Array.from(d3.group(filteredData, d => d.NOC), ([key, values]) => ({
     key,
     values: Array.from(d3.group(values, d => d.Medal), ([medal, medalValues]) => ({
       key: medal,
-      value: medalValues.length
+      value: medalValues.length,
+      male: medalValues.filter(d => d.Sex === 'M').length,
+      female: medalValues.filter(d => d.Sex === 'F').length
     }))
-  }));
-
-  console.log("Medal Data:", medalData);
+  })).filter(d => d.values.reduce((acc, curr) => acc + curr.value, 0) > 1);
 
   const margin = { top: 50, right: 30, bottom: 100, left: 60 };
   const width = 800 - margin.left - margin.right;
@@ -22,7 +22,6 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  // X axis
   const x = d3.scaleBand()
     .domain(medalData.map(d => d.key))
     .range([0, width])
@@ -35,7 +34,6 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .attr("transform", "rotate(-45)")
     .style("text-anchor", "end");
 
-  // Y axis
   const y = d3.scaleLinear()
     .domain([0, d3.max(medalData, d => d3.sum(d.values, v => v.value))])
     .nice()
@@ -44,17 +42,14 @@ d3.csv("data/athlete_events.csv").then(function(data) {
   svg.append("g")
     .call(d3.axisLeft(y));
 
-  // Define color scale
   const color = d3.scaleOrdinal()
     .domain(["Gold", "Silver", "Bronze"])
     .range(["#ffd700", "#c0c0c0", "#cd7f32"]);
 
-  // Tooltip
   const tooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
-  // Stack the data
   const stack = d3.stack()
     .keys(["Gold", "Silver", "Bronze"])
     .value((d, key) => {
@@ -64,9 +59,6 @@ d3.csv("data/athlete_events.csv").then(function(data) {
 
   const series = stack(medalData);
 
-  console.log("Stacked Data:", series);
-
-  // Bars
   svg.selectAll(".bar")
     .data(series)
     .enter()
@@ -83,12 +75,17 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     .attr("width", x.bandwidth())
     .on("mouseover", function(event, d) {
       const [medalType] = d3.select(this.parentNode).datum().key;
+      const maleCount = d.data.values.find(v => v.key === medalType)?.male || 0;
+      const femaleCount = d.data.values.find(v => v.key === medalType)?.female || 0;
+
       tooltip.transition()
         .duration(200)
         .style("opacity", .9);
       tooltip.html("Country: " + d.data.key + "<br/>" +
                    "Medal: " + medalType + "<br/>" +
-                   "Count: " + (d[1] - d[0]))
+                   "Count: " + (d[1] - d[0]) + "<br/>" +
+                   "Male: " + maleCount + "<br/>" +
+                   "Female: " + femaleCount)
         .style("left", (event.pageX + 5) + "px")
         .style("top", (event.pageY - 28) + "px");
     })
@@ -98,7 +95,6 @@ d3.csv("data/athlete_events.csv").then(function(data) {
         .style("opacity", 0);
     });
 
-  // Add axis labels
   svg.append("text")
     .attr("class", "axis-title")
     .attr("x", width / 2)
