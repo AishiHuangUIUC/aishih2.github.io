@@ -1,15 +1,14 @@
 // Load the CSV data
 d3.csv("data/athlete_events.csv").then(function(data) {
-  // Group data by Year
-  const yearData = d3.nest()
-    .key(d => d.Year)
-    .rollup(v => ({
-      totalAthletes: v.length,
-      totalCountries: d3.set(v.map(d => d.NOC)).size(),
-      totalSports: d3.set(v.map(d => d.Sport)).size()
-    }))
-    .entries(data)
-    .map(d => ({ key: +d.key, value: d.value })); // Convert key to number
+  // Group data by Year using d3.group
+  const yearData = Array.from(d3.group(data, d => d.Year), ([key, values]) => ({
+    key: +key,
+    value: {
+      totalAthletes: values.length,
+      totalCountries: new Set(values.map(d => d.NOC)).size,
+      totalSports: new Set(values.map(d => d.Sport)).size
+    }
+  }));
 
   console.log("Year Data:", yearData);
 
