@@ -1,12 +1,8 @@
-// // scene3.js
 // d3.csv("data/athlete_events.csv").then(function(data) {
 //     const yearData = Array.from(d3.group(data, d => d.Year), ([key, values]) => ({
 //         key: +key,
-//         value: {
-//             totalAthletes: values.length,
-//             totalCountries: new Set(values.map(d => d.NOC)).size,
-//             totalSports: new Set(values.map(d => d.Sport)).size
-//         }
+//         totalCountries: new Set(values.map(d => d.NOC)).size,
+//         totalAthletes: values.length
 //     })).sort((a, b) => a.key - b.key);
 
 //     const margin = { top: 50, right: 30, bottom: 100, left: 60 };
@@ -25,7 +21,7 @@
 //         .range([0, width]);
 
 //     const y = d3.scaleLinear()
-//         .domain([0, d3.max(yearData, d => d.value.totalAthletes)])
+//         .domain([0, d3.max(yearData, d => d.totalCountries)])
 //         .range([height, 0]);
 
 //     svg.append("g")
@@ -35,24 +31,72 @@
 //     svg.append("g")
 //         .call(d3.axisLeft(y));
 
-//     svg.selectAll(".line")
-//         .data([yearData])
-//         .enter()
-//         .append("path")
-//         .attr("class", "line")
-//         .attr("d", d3.line()
-//             .x(d => x(d.key))
-//             .y(d => y(d.value.totalAthletes)))
+//     svg.append("text")
+//         .attr("text-anchor", "end")
+//         .attr("x", width / 2)
+//         .attr("y", height + margin.top + 40)
+//         .text("Year");
+
+//     svg.append("text")
+//         .attr("text-anchor", "end")
+//         .attr("x", -height / 2)
+//         .attr("y", -margin.left + 20)
+//         .attr("transform", "rotate(-90)")
+//         .text("Number of Countries");
+
+//     const line = d3.line()
+//         .x(d => x(d.key))
+//         .y(d => y(d.totalCountries));
+
+//     svg.append("path")
+//         .datum(yearData)
 //         .attr("fill", "none")
 //         .attr("stroke", "steelblue")
-//         .attr("stroke-width", 2);
+//         .attr("stroke-width", 1.5)
+//         .attr("d", line);
+
+//     const tooltip = d3.select("body").append("div")
+//         .attr("class", "tooltip")
+//         .style("display", "none");
+
+//     svg.selectAll("circle")
+//         .data(yearData)
+//         .enter()
+//         .append("circle")
+//         .attr("cx", d => x(d.key))
+//         .attr("cy", d => y(d.totalCountries))
+//         .attr("r", 3)
+//         .attr("fill", "steelblue")
+//         .on("mouseover", function(event, d) {
+//             const [mouseX, mouseY] = d3.pointer(event);
+//             tooltip.style("display", "block")
+//                 .html(`Year: ${d.key}<br>Countries: ${d.totalCountries}<br>Athletes: ${d.totalAthletes}`)
+//                 .style("left", (event.pageX + 10) + "px")
+//                 .style("top", (event.pageY + 10) + "px");
+//         })
+//         .on("mouseout", function() {
+//             tooltip.style("display", "none");
+//         });
+// }).catch(function(error) {
+//     console.error("Error loading the CSV file:", error);
 // });
 
 
 
 
+
+
 d3.csv("data/athlete_events.csv").then(function(data) {
-    const yearData = Array.from(d3.group(data, d => d.Year), ([key, values]) => ({
+    const summerData = data.filter(d => d.Season === "Summer");
+    const winterData = data.filter(d => d.Season === "Winter");
+
+    const summerYearData = Array.from(d3.group(summerData, d => d.Year), ([key, values]) => ({
+        key: +key,
+        totalCountries: new Set(values.map(d => d.NOC)).size,
+        totalAthletes: values.length
+    })).sort((a, b) => a.key - b.key);
+
+    const winterYearData = Array.from(d3.group(winterData, d => d.Year), ([key, values]) => ({
         key: +key,
         totalCountries: new Set(values.map(d => d.NOC)).size,
         totalAthletes: values.length
@@ -70,11 +114,11 @@ d3.csv("data/athlete_events.csv").then(function(data) {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     const x = d3.scaleLinear()
-        .domain(d3.extent(yearData, d => d.key))
+        .domain(d3.extent([...summerYearData, ...winterYearData], d => d.key))
         .range([0, width]);
 
     const y = d3.scaleLinear()
-        .domain([0, d3.max(yearData, d => d.totalCountries)])
+        .domain([0, d3.max([...summerYearData, ...winterYearData], d => d.totalCountries)])
         .range([height, 0]);
 
     svg.append("g")
@@ -97,39 +141,57 @@ d3.csv("data/athlete_events.csv").then(function(data) {
         .attr("transform", "rotate(-90)")
         .text("Number of Countries");
 
-    const line = d3.line()
+    const lineSummer = d3.line()
+        .x(d => x(d.key))
+        .y(d => y(d.totalCountries));
+
+    const lineWinter = d3.line()
         .x(d => x(d.key))
         .y(d => y(d.totalCountries));
 
     svg.append("path")
-        .datum(yearData)
+        .datum(summerYearData)
         .attr("fill", "none")
         .attr("stroke", "steelblue")
         .attr("stroke-width", 1.5)
-        .attr("d", line);
+        .attr("d", lineSummer);
+
+    svg.append("path")
+        .datum(winterYearData)
+        .attr("fill", "none")
+        .attr("stroke", "firebrick")
+        .attr("stroke-width", 1.5)
+        .attr("d", lineWinter);
 
     const tooltip = d3.select("body").append("div")
         .attr("class", "tooltip")
         .style("display", "none");
 
-    svg.selectAll("circle")
-        .data(yearData)
-        .enter()
-        .append("circle")
-        .attr("cx", d => x(d.key))
-        .attr("cy", d => y(d.totalCountries))
-        .attr("r", 3)
-        .attr("fill", "steelblue")
-        .on("mouseover", function(event, d) {
-            const [mouseX, mouseY] = d3.pointer(event);
-            tooltip.style("display", "block")
-                .html(`Year: ${d.key}<br>Countries: ${d.totalCountries}<br>Athletes: ${d.totalAthletes}`)
-                .style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY + 10) + "px");
-        })
-        .on("mouseout", function() {
-            tooltip.style("display", "none");
-        });
+    const addCircles = (data, color) => {
+        svg.selectAll(`circle.${color}`)
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("class", color)
+            .attr("cx", d => x(d.key))
+            .attr("cy", d => y(d.totalCountries))
+            .attr("r", 3)
+            .attr("fill", color)
+            .on("mouseover", function(event, d) {
+                const [mouseX, mouseY] = d3.pointer(event);
+                tooltip.style("display", "block")
+                    .html(`Year: ${d.key}<br>Countries: ${d.totalCountries}<br>Athletes: ${d.totalAthletes}`)
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY + 10) + "px");
+            })
+            .on("mouseout", function() {
+                tooltip.style("display", "none");
+            });
+    };
+
+    addCircles(summerYearData, "steelblue");
+    addCircles(winterYearData, "firebrick");
 }).catch(function(error) {
     console.error("Error loading the CSV file:", error);
 });
+
