@@ -121,7 +121,15 @@ d3.csv("data/athlete_events.csv").then(function(data) {
     svg.append("g")
         .call(d3.axisLeft(yScale));
 
-    // Basic scatter plot
+    // Color scale
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+    // Tooltip
+    const tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("display", "none");
+
+    // Scatter plot
     svg.selectAll("circle")
         .data(data)
         .enter()
@@ -129,10 +137,21 @@ d3.csv("data/athlete_events.csv").then(function(data) {
         .attr("cx", d => xScale(+d.Age))
         .attr("cy", d => yScale(+d.Height))
         .attr("r", 5)
-        .attr("fill", "steelblue");
+        .attr("fill", d => colorScale(d.Sport))
+        .on("mouseover", function(event, d) {
+            const [mouseX, mouseY] = d3.pointer(event);
+            tooltip.style("display", "block")
+                .html(`Name: ${d.Name}<br>Age: ${d.Age}<br>Height: ${d.Height} cm<br>Team: ${d.Team}<br>Sport: ${d.Sport}`)
+                .style("left", (mouseX + 10) + "px")
+                .style("top", (mouseY + 10) + "px");
+        })
+        .on("mouseout", function() {
+            tooltip.style("display", "none");
+        });
 }).catch(function(error) {
     console.error("Error loading the CSV file:", error);
 });
+
 
 
 
