@@ -184,7 +184,7 @@ d3.csv("data/athlete_events.csv").then(function(data) {
         .data(d => [
             { type: 'gold', value: d.gold, y0: 0, y1: d.gold },
             { type: 'silver', value: d.silver, y0: d.gold, y1: d.gold + d.silver },
-            { type: 'bronze', value: d.bronze, y0: d.gold + d.silver, y1: d.total }
+            { type: 'bronze', value: d.bronze, y0: d.gold + d.silver, y1: d.gold + d.silver + d.bronze }
         ])
         .enter()
         .append("rect")
