@@ -1,19 +1,37 @@
-# Olympic History Visualization
+# Olympic Data Visualization
 
-This project visualizes 120 years of Olympic history using D3.js.
+## Overview
+
+This project provides visualizations of Olympic athlete data, focusing on three main aspects:
+1. An overview of Olympic athletes by age and height.
+2. The distribution of medals among the top 15 countries.
+3. The number of countries participating in the Olympics over the years.
 
 ## Scenes
 
-1. **Overview of Olympic Participation**
-   - A bar chart showing the number of participants in each Olympic year.
-2. **Medal Distribution by Country**
-   - A visualization highlighting the distribution of medals among countries.
-3. **Top Athletes Over the Years**
-   - A focus on the top-performing athletes in Olympic history.
+### Scene 1: Olympic Athletes Overview
+This scene provides an overview of Olympic athletes, showing their age and height. The scatter plot represents each athlete, with age on the X-axis and height on the Y-axis. Different sports are color-coded to show the distribution of athletes across various sports. Hover over the points to see more details about each athlete, including their name, age, height, team, and sport.
 
-## Navigation
 
-- Use the right arrow key to navigate through the scenes.
+### Scene 2: Medal Distribution by Country
+This scene displays the medal distribution among the top 15 countries in Olympic history. The bar chart is divided into segments representing gold, silver, and bronze medals. The height of each bar indicates the total number of medals earned by the country. Hover over the segments to see the exact number of each type of medal earned by the country.
+
+
+### Scene 3: Olympic Participation by Year
+This scene shows the number of countries participating in the Olympics for each year, with separate lines for summer and winter games. The line chart highlights the growth and changes in Olympic participation over time. Hover over the lines to see the number of athletes who attended the Olympics each year.
+
+## How to Use
+Open the `index.html` file in a web browser to view the visualizations. Navigate through the scenes using the "Next" and "Prev" buttons.
+
+## Dependencies
+- D3.js library for data visualization.
+
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+# Olympic History Visualization
+
+This project visualizes 120 years of Olympic history using D3.js.
 
 ## Data Source
 
