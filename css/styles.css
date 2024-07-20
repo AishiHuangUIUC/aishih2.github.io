@@ -76,3 +76,14 @@ button {
 button:hover {
     background-color: #B9D9EB;
 }
+
+.content-wrapper {
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+.content-wrapper p {
+    font-size: 15pt;
+    margin-bottom: 20px;
+    text-align: justify;
+}
