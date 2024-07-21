@@ -100,3 +100,11 @@ button:hover {
     height: 25vh;
     object-fit: cover;
 }
+
+.text-container {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+      }
