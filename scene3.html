@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!--  <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -27,13 +27,9 @@
             margin-bottom: 20px;
         }
         .text-container {
-/*             max-width: 800px;
+            max-width: 800px;
             text-align: left;
-            overflow: auto;  */
-         flex: 1;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+            overflow: auto; 
         }
         .bottom-banner {
             text-align: center;
@@ -68,6 +64,92 @@
              <li>According to the graph, we can see that the number of countries participating in both summer and winter Olympic Games are increasing every 4 years.</li>
              <li>The number of athletes participating in summer or winter Olympic Games are both increasing over time. </li>
              <li>Summer Olympic Games generally have more countries and athletes participating than winter Olympic Games.</li>
+            </ul>
+        </div>
+    </div>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="js/scene3.js"></script>
+    <div class="bottom-banner">
+        <button onclick="location.href='scene2.html'">Prev</button>
+        <button onclick="location.href='index.html'">Next</button>
+    </div>
+</body>
+
+</html>
+ -->
+
+
+
+
+
+ <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countries Participation Over the Years</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            overflow: auto;
+        }
+        .banner {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: row; /* Change to row for horizontal layout */
+            justify-content: center; /* Center the items horizontally */
+            align-items: flex-start; /* Align items at the start */
+            overflow: auto;
+        }
+        #plot-container {
+            width: 50%; /* Adjust width as needed */
+            max-width: 800px;
+            margin-right: 20px; /* Space between plot and text */
+        }
+        .text-container {
+            width: 50%; /* Adjust width as needed */
+            max-width: 800px;
+            text-align: left;
+            overflow: auto; 
+        }
+        .bottom-banner {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            width: auto;
+            height: auto;
+            padding: 5px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="banner">
+        <h1>Countries Participation Over the Years</h1>
+        <button onclick="location.href='index.html'">Home</button>
+    </div>
+    <div class="container">
+        <div id="plot-container"></div>
+        <div class="text-container">
+            <p>This visualization shows the number of countries that participated in the Olympics each year. Hovering over the line reveals the number of athletes that participated in the corresponding year.</p>
+            <ul>
+                <li>The blue line represents summer Olympic Games, and the red line represents winter Olympic Games.</li>   
+                <li>According to the graph, we can see that the number of countries participating in both summer and winter Olympic Games is increasing every 4 years.</li>
+                <li>The number of athletes participating in summer or winter Olympic Games is both increasing over time.</li>
+                <li>Summer Olympic Games generally have more countries and athletes participating than winter Olympic Games.</li>
             </ul>
         </div>
     </div>
