@@ -15,8 +15,7 @@ d3.csv("data/athlete_events.csv").then(function(data) {
         .sort((a, b) => d3.descending(a.total, b.total))
         .slice(0, 15);
 
-    // const margin = { top: 20, right: 30, bottom: 100, left: 60 };
-    const margin = { top: 20, right: 20, bottom: 60, left: 80 };
+    const margin = { top: 20, right: 30, bottom: 100, left: 60 };
     const width = 800 - margin.left - margin.right;
     const height = 600 - margin.top - margin.bottom;
 
