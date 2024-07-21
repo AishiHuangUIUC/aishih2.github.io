@@ -76,7 +76,7 @@
 
 
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -154,5 +154,84 @@
         <button onclick="location.href='scene3.html'">Next</button>
     </div>
 </body>
-</html>
+</html> -->
 
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medal Distribution by Country</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            overflow: auto;
+        }
+        .banner {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .container {
+            display: table;
+            width: 100%;
+        }
+        .cell {
+            display: table-cell;
+            vertical-align: top;
+        }
+        #plot-container {
+            width: 70%;
+        }
+        .text-container {
+            width: 30%;
+            padding-left: 20px; /* Space between plot and text */
+            box-sizing: border-box;
+        }
+        .bottom-banner {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            width: auto;
+            height: auto;
+            padding: 5px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="banner">
+        <h1>Medal Distribution by Country</h1>
+        <button onclick="location.href='index.html'">Home</button>
+    </div>
+    <div class="container">
+        <div id="plot-container" class="cell"></div>
+        <div class="text-container cell">
+            <p>This visualization shows the medal distribution among the top 15 countries in Olympic history. Hover over the segments to see the exact number of each type of medal earned by the country. Key points:</p>
+            <ul>
+                <li>The height of each bar represents the total number of medals earned by the country. Each bar is divided into three segments: gold, silver, and bronze medals.</li>
+                <li>USA, GBR, RUS, and SWE are the top countries that earn the most medals. The United States earns the most gold and silver medals. Russia earns the most bronze medals according to the dataset.</li>
+            </ul>
+        </div>
+    </div>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="js/scene2.js"></script>
+    <div class="bottom-banner">
+        <button onclick="location.href='scene1.html'">Prev</button>
+        <button onclick="location.href='scene3.html'">Next</button>
+    </div>
+</body>
+
+</html>
