@@ -82,7 +82,7 @@
 
 
 
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -101,21 +101,23 @@
         }
         .container {
             display: flex;
-            flex-direction: row; /* Change to row for horizontal layout */
+            flex-direction: row; /* Horizontal layout */
             justify-content: center; /* Center the items horizontally */
-            align-items: flex-start; /* Align items at the start */
+            align-items: stretch; /* Align items to fill the container height */
             overflow: auto;
         }
         #plot-container {
-            width: 50%; /* Adjust width as needed */
+            width: 70%; /* Adjust width to 70% */
             max-width: 800px;
             margin-right: 20px; /* Space between plot and text */
         }
         .text-container {
-            width: 50%; /* Adjust width as needed */
+            width: 30%; /* Adjust width to 30% */
             max-width: 800px;
             text-align: left;
-            overflow: auto; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center text vertically */
         }
         .bottom-banner {
             text-align: center;
@@ -162,3 +164,4 @@
 </body>
 
 </html>
+
