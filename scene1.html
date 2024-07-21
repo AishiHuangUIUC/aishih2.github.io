@@ -83,7 +83,7 @@
 
 
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -162,5 +162,95 @@
     </div>
 </body>
 
-</html>
+</html> -->
 
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olympic Athletes Overview</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            overflow: auto;
+        }
+        .banner {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: row; /* Horizontal layout */
+            justify-content: center; /* Center the items horizontally */
+            align-items: flex-start; /* Align items to the top */
+            overflow: auto;
+        }
+        #plot-container {
+            width: 70%; /* Adjust width to 70% */
+            max-width: 800px;
+            margin-right: 20px; /* Space between plot and text */
+        }
+        .text-container {
+            width: 30%; /* Adjust width to 30% */
+            max-width: 800px;
+            text-align: left;
+            margin: 0; /* Remove default margin */
+        }
+        .text-container p,
+        .text-container ul {
+            margin: 0; /* Remove margin for p and ul elements */
+        }
+        .bottom-banner {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            width: auto;
+            height: auto;
+            padding: 5px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="banner">
+        <h1>Olympic Athletes Overview</h1>
+        <button onclick="location.href='index.html'">Home</button>
+    </div>
+    <div class="container">
+        <div id="plot-container"></div>
+        <div class="text-container">
+            <p>This visualization provides an overview of Olympic athletes, showing their age and height. Hover over the points to see more details about each athlete.</p>
+            <ul>
+                <li>Age is represented on the X-axis.</li>
+                <li>Height (in cm) is represented on the Y-axis.</li>
+                <li>Hovering over a point reveals the athlete's name, age, height, team, and sport.</li>
+                <li>Points are colored by sport to show the distribution of different sports.</li>
+            </ul>
+            <p>We can observe from the plot that most of the athletes who participated in the Olympic Games are aged between 15 to 35. The common height range is 160 to 190 cm.</p>
+            <p>Athletes in shooting sport generally have a higher age range when they participated in the Olympic Games, around 35 to 55 years old.</p>
+            <p>Basketball players who participated in Olympic Games have a height range of 180 to 200 cm.</p>
+        </div>
+    </div>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="js/scene1.js"></script>
+    <div class="bottom-banner">
+        <button onclick="location.href='index.html'">Prev</button>
+        <button onclick="location.href='scene2.html'">Next</button>
+    </div>
+</body>
+
+</html>
